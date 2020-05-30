@@ -1,0 +1,1532 @@
+{
+	"info": {
+		"_postman_id": "b175ddb8-60d8-45e4-9609-e0f265dbceb2",
+		"name": "AAA",
+		"description": "A company named ‘AAA’ has developed some APIs which need to tested.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "API tests",
+			"item": [
+				{
+					"name": "Employees",
+					"item": [
+						{
+							"name": "Employees",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "92a693ab-e808-427b-9f7a-31905f636065",
+										"exec": [
+											"const EXPECTED_STATUS_CODE = 200;",
+											"const EXPECTED_ID = \"1\";",
+											"const EXPECTED_IMAGE = \"\";",
+											"",
+											"let jsonResponse = pm.response.json();",
+											"",
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(EXPECTED_STATUS_CODE);",
+											"});",
+											"",
+											"pm.test(\"Response data is an array\", function () {",
+											"    pm.expect(jsonResponse.data).to.be.an('array')",
+											"});",
+											"",
+											"pm.test(\"Response data is not empty\", function () {",
+											"    pm.expect(jsonResponse.data[0]).to.not.be.empty",
+											"});",
+											"",
+											"pm.test(\"Verify first element contains id\", function () {",
+											"    pm.expect(jsonResponse.data[0].id).to.be.equal(EXPECTED_ID); ",
+											"});",
+											"",
+											"pm.test(\"Verify first element contains employee_name\", function () {",
+											"    pm.expect(jsonResponse.data[0].employee_name).to.be.a('string');",
+											"});",
+											"",
+											"pm.test(\"Verify first element contains salary\", function () {",
+											"    pm.expect(jsonResponse.data[0].employee_salary).to.be.a('string');",
+											"});",
+											"",
+											"pm.test(\"Verify first element contains age\", function () {",
+											"    pm.expect(jsonResponse.data[0].employee_age).to.be.a('string');",
+											"});",
+											"",
+											"pm.test(\"Verify first element contains profile_image\", function () {",
+											"    pm.expect(jsonResponse.data[0].profile_image).to.be.a('string');",
+											"});",
+											"",
+											"pm.test(\"Check response data contain more than 1 item\", function () {",
+											"    pm.expect(Object.keys(jsonResponse.data).length > 1).to.be.true;",
+											"});",
+											"",
+											"pm.test(\"Check response data contain more than 1 item\", function () {",
+											"    pm.expect(Object.keys(jsonResponse.data).length > 1).to.be.true;",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{endpoint}}/employees",
+									"host": [
+										"{{endpoint}}"
+									],
+									"path": [
+										"employees"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Employee",
+					"item": [
+						{
+							"name": "ValidID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "9a260ac1-6771-4582-90f3-ad888c247c7b",
+										"exec": [
+											"const EXPECTED_STATUS_CODE = 200;\r",
+											"const EXPECTED_LATENCY = 200;\r",
+											"const NAME_REGEX = /^[a-zA-Z]+(\\s[a-zA-Z]+)*\\s[a-zA-Z]+$/\r",
+											"const NUMERIC_REGEX = /^[1-9]\\d+/\r",
+											"let jsonResponse = pm.response.json();\r",
+											"\r",
+											"pm.test(\"response is ok\", function () {\r",
+											"    pm.expect(pm.response.code).to.equal(EXPECTED_STATUS_CODE);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 200ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(EXPECTED_LATENCY);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Content-Type is present\", function () {\r",
+											"    pm.response.to.have.header(\"Content-Type\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Content-Type is JSON\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"})\r",
+											"\r",
+											"pm.test(\"Response body should be an object\", function() {\r",
+											"    pm.expect(jsonResponse).to.be.an('object');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response body should be in the correct format\", function() {\r",
+											"    pm.expect(jsonResponse.status).to.be.a('string');\r",
+											"    pm.expect(jsonResponse.data).to.be.a('object');\r",
+											"    pm.expect(jsonResponse.data.id).to.be.a('string');\r",
+											"    pm.expect(jsonResponse.data.employee_name).to.be.a('string');\r",
+											"    pm.expect(jsonResponse.data.employee_salary).to.be.a('string');\r",
+											"    pm.expect(jsonResponse.data.employee_age).to.be.a('string');\r",
+											"    pm.expect(jsonResponse.data.profile_image).to.be.a('string');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Returns alphabetic name\", function () {\r",
+											"    pm.expect(jsonResponse.data.employee_name).to.match(NAME_REGEX);\r",
+											"});\r",
+											"pm.test(\"Returns numeric salary\", function () {\r",
+											"    pm.expect(jsonResponse.data.employee_salary).to.match(NUMERIC_REGEX);\r",
+											"});\r",
+											"pm.test(\"Returns numeric age\", function () {\r",
+											"    pm.expect(jsonResponse.data.employee_age).to.match(NUMERIC_REGEX);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Returns blank image\", function () {\r",
+											"    pm.expect(jsonResponse.data.profile_image).to.equal(\"\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{endpoint}}/employee/1",
+									"host": [
+										"{{endpoint}}"
+									],
+									"path": [
+										"employee",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "InvalidID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "e6132324-b14d-485a-ac60-5933d7b26284",
+										"exec": [
+											"const EXPECTED_STATUS_CODE = 400;\r",
+											"const EXPECTED_LATENCY = 200;\r",
+											"const EXPECTED_DATA = \"Record does not found.\"\r",
+											"const EXPECTED_STATUS = \"failed\"\r",
+											"let jsonResponse = pm.response.json();\r",
+											"\r",
+											"pm.test(\"response is unauthorized\", function () {\r",
+											"    pm.expect(pm.response.code).to.equal(EXPECTED_STATUS_CODE);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Content-Type is present\", function () {\r",
+											"    pm.response.to.have.header(\"Content-Type\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Content-Type is JSON\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"})\r",
+											"\r",
+											"pm.test(\"Response body should be an object\", function() {\r",
+											"    pm.expect(jsonResponse).to.be.an('object');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response body should be in the correct format\", function() {\r",
+											"    pm.expect(jsonResponse.status).to.be.a('string');\r",
+											"    pm.expect(jsonResponse.data).to.be.a('string');\r",
+											"  });\r",
+											"\r",
+											"  pm.test(\"Returns failed status on invalid ID\", function () {\r",
+											"    pm.expect(jsonResponse.status).to.equal(EXPECTED_STATUS);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Returns Record does not found on invalid ID\", function () {\r",
+											"    pm.expect(jsonResponse.data).to.equal(EXPECTED_DATA);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{endpoint}}/employee/-1",
+									"host": [
+										"{{endpoint}}"
+									],
+									"path": [
+										"employee",
+										"-1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "EmptyID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "b70c9d74-87d3-4921-8b6f-a2edd3e93213",
+										"exec": [
+											"const EXPECTED_STATUS_CODE = 400;\r",
+											"const EXPECTED_LATENCY = 200;\r",
+											"const EXPECTED_DATA = \"Id is empty\"\r",
+											"const EXPECTED_STATUS = \"failed\"\r",
+											"let jsonResponse = pm.response.json();\r",
+											"\r",
+											"pm.test(\"response is bad request\", function () {\r",
+											"    pm.expect(pm.response.code).to.equal(EXPECTED_STATUS_CODE);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Content-Type is present\", function () {\r",
+											"    pm.response.to.have.header(\"Content-Type\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Content-Type is JSON\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"})\r",
+											"\r",
+											"pm.test(\"Response body should be an object\", function() {\r",
+											"    pm.expect(jsonResponse).to.be.an('object');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response body should be in the correct format\", function() {\r",
+											"    pm.expect(jsonResponse.status).to.be.a('string');\r",
+											"    pm.expect(jsonResponse.message).to.be.a('string');\r",
+											"  });\r",
+											"\r",
+											"  pm.test(\"Returns failed status on invalid ID\", function () {\r",
+											"    pm.expect(jsonResponse.status).to.equal(EXPECTED_STATUS);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Returns Record does not found on invalid ID\", function () {\r",
+											"    pm.expect(jsonResponse.message).to.equal(EXPECTED_DATA);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{endpoint}}/employee/0",
+									"host": [
+										"{{endpoint}}"
+									],
+									"path": [
+										"employee",
+										"0"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Create",
+					"item": [
+						{
+							"name": "EmptyValue",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "b9a3345a-9bdf-4afb-8767-1b95fa44843c",
+										"exec": [
+											"const EXPECTED_STATUS_CODE = 422;",
+											"",
+											"pm.test(\"response is NOT 200\", function () {",
+											"    pm.response.to.not.have.status(200);",
+											"});",
+											"pm.test(\"response is 422\", function () {",
+											"    pm.expect(pm.response.code).to.not.equal(EXPECTED_STATUS_CODE);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"name\":\" \",\n    \"salary\":\" \",\n    \"age\":\" \"\n}",
+									"options": {
+										"raw": {}
+									}
+								},
+								"url": {
+									"raw": "{{endpoint}}/create",
+									"host": [
+										"{{endpoint}}"
+									],
+									"path": [
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Blank",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "c1994af0-a462-46d7-b9a0-abfecfceeecf",
+										"exec": [
+											"const EXPECTED_STATUS_CODE = 422;",
+											"",
+											"pm.test(\"response is NOT 200\", function () {",
+											"    pm.response.to.not.have.status(200);",
+											"});",
+											"pm.test(\"response is 422\", function () {",
+											"    pm.expect(pm.response.code).to.not.equal(EXPECTED_STATUS_CODE);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\n}",
+									"options": {
+										"raw": {}
+									}
+								},
+								"url": {
+									"raw": "{{endpoint}}/create",
+									"host": [
+										"{{endpoint}}"
+									],
+									"path": [
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "InValidCreate",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "0324dd1c-9d14-402f-8fea-ab0651f4da9b",
+										"exec": [
+											"const EXPECTED_STATUS_CODE = 422;",
+											"",
+											"pm.test(\"response is NOT 200\", function () {",
+											"    pm.response.to.not.have.status(200);",
+											"});",
+											"pm.test(\"response is 422\", function () {",
+											"    pm.expect(pm.response.code).to.not.equal(EXPECTED_STATUS_CODE);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"name\":\"120133127\",\n    \"salary\":\"Ten Thousand\",\n    \"age\":\"Sixty\"\n}",
+									"options": {
+										"raw": {}
+									}
+								},
+								"url": {
+									"raw": "{{endpoint}}/create",
+									"host": [
+										"{{endpoint}}"
+									],
+									"path": [
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "OutOfBound",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "efeb5829-d64d-4165-9bfa-43c66529a73c",
+										"exec": [
+											"const EXPECTED_STATUS_CODE = 422;\r",
+											"\r",
+											"pm.test(\"response is NOT 200\", function () {\r",
+											"    pm.response.to.not.have.status(200);\r",
+											"});\r",
+											"pm.test(\"response is 422\", function () {\r",
+											"    pm.expect(pm.response.code).to.not.equal(EXPECTED_STATUS_CODE);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"name\": \"RobertWithAVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryUnusualLongFirstName RobertWithAVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryUnusualLongLastName\",\n\t\"salary\": \"18446744073709551616\",\n\t\"age\": \"18446744073709551616\"\n}",
+									"options": {
+										"raw": {}
+									}
+								},
+								"url": {
+									"raw": "{{endpoint}}/create",
+									"host": [
+										"{{endpoint}}"
+									],
+									"path": [
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "LargeValue",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "4ca62e14-1744-43f3-ad09-6ce10f37a529",
+										"exec": [
+											"const EXPECTED_STATUS_CODE = 200;\r",
+											"const EXPECTED_LATENCY = 200;\r",
+											"const EXPECTED_NAME = \"RobertWithAVeryUnusualLongFirsName RobertWithAVeryUnusualLongLastName\";\r",
+											"const EXPECTED_SALARY = 18446744073709551615;\r",
+											"const EXPECTED_AGE = 18446744073709551615;\r",
+											"let jsonResponse = pm.response.json();\r",
+											"\r",
+											"pm.test(\"response is ok\", function () {\r",
+											"    pm.expect(pm.response.code).to.equal(EXPECTED_STATUS_CODE);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 200ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(EXPECTED_LATENCY);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Content-Type is present\", function () {\r",
+											"    pm.response.to.have.header(\"Content-Type\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Content-Type is JSON\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"})\r",
+											"\r",
+											"pm.test(\"Response body should be an object\", function() {\r",
+											"    pm.expect(jsonResponse).to.be.an('object');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response body should be in the correct format\", function() {\r",
+											"    pm.expect(jsonResponse.status).to.be.a('string');\r",
+											"    pm.expect(jsonResponse.data).to.be.a('object');\r",
+											"    pm.expect(jsonResponse.data.id).to.be.a('number');\r",
+											"    pm.expect(jsonResponse.data.name).to.be.a('string');\r",
+											"    pm.expect(jsonResponse.data.salary).to.be.a('string');\r",
+											"    pm.expect(jsonResponse.data.age).to.be.a('string');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Returns alphabetic name\", function () {\r",
+											"    console.log(data[\"name\"]);\r",
+											"    pm.expect(jsonResponse.data.name).to.equal(EXPECTED_NAME);\r",
+											"});\r",
+											"pm.test(\"Returns numeric salary\", function () {\r",
+											"    pm.expect(jsonResponse.data.salary).to.equal(EXPECTED_SALARY);\r",
+											"});\r",
+											"pm.test(\"Returns numeric age\", function () {\r",
+											"    pm.expect(jsonResponse.data.age).to.equal(EXPECTED_AGE);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"name\": \"RobertWithAVeryUnusualLongFirsName RobertWithAVeryUnusualLongLastName\",\n\t\"salary\": \"18446744073709551615\",\n\t\"age\": \"18446744073709551615\"\n}",
+									"options": {
+										"raw": {}
+									}
+								},
+								"url": {
+									"raw": "{{endpoint}}/create",
+									"host": [
+										"{{endpoint}}"
+									],
+									"path": [
+										"create"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Update",
+					"item": [
+						{
+							"name": "EmptyValue",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "ed8f43ee-2d4e-46b2-94cf-3d64cebb0d93",
+										"exec": [
+											"const EXPECTED_STATUS_CODE = 422;",
+											"",
+											"pm.test(\"response is NOT 200\", function () {",
+											"    pm.response.to.not.have.status(200);",
+											"});",
+											"pm.test(\"response is 422\", function () {",
+											"    pm.expect(pm.response.code).to.not.equal(EXPECTED_STATUS_CODE);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"name\":\" \",\n    \"salary\":\" \",\n    \"age\":\" \"\n}",
+									"options": {
+										"raw": {}
+									}
+								},
+								"url": {
+									"raw": "{{endpoint}}/update/1",
+									"host": [
+										"{{endpoint}}"
+									],
+									"path": [
+										"update",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Blank",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "a8a23b4a-44f1-41ae-8ef4-de7d0136bf1f",
+										"exec": [
+											"const EXPECTED_STATUS_CODE = 422;",
+											"",
+											"pm.test(\"response is NOT 200\", function () {",
+											"    pm.response.to.not.have.status(200);",
+											"});",
+											"pm.test(\"response is 422\", function () {",
+											"    pm.expect(pm.response.code).to.not.equal(EXPECTED_STATUS_CODE);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"name\":\"\",\n    \"salary\":\"\",\n    \"age\":\"\"\n}",
+									"options": {
+										"raw": {}
+									}
+								},
+								"url": {
+									"raw": "{{endpoint}}/update/1",
+									"host": [
+										"{{endpoint}}"
+									],
+									"path": [
+										"update",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "EmptyID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "5173c72a-6960-41ef-81fa-13deb83a471f",
+										"exec": [
+											"const EXPECTED_STATUS_CODE = 400;\r",
+											"const EXPECTED_LATENCY = 200;\r",
+											"const EXPECTED_DATA = \"Id is empty\"\r",
+											"const EXPECTED_STATUS = \"failed\"\r",
+											"let jsonResponse = pm.response.json();\r",
+											"\r",
+											"pm.test(\"response is bad request\", function () {\r",
+											"    pm.expect(pm.response.code).to.equal(EXPECTED_STATUS_CODE);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Content-Type is present\", function () {\r",
+											"    pm.response.to.have.header(\"Content-Type\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Content-Type is JSON\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"})\r",
+											"\r",
+											"pm.test(\"Response body should be an object\", function() {\r",
+											"    pm.expect(jsonResponse).to.be.an('object');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response body should be in the correct format\", function() {\r",
+											"    pm.expect(jsonResponse.status).to.be.a('string');\r",
+											"    pm.expect(jsonResponse.message).to.be.a('string');\r",
+											"  });\r",
+											"\r",
+											"  pm.test(\"Returns failed status on invalid ID\", function () {\r",
+											"    pm.expect(jsonResponse.status).to.equal(EXPECTED_STATUS);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Returns Record does not found on invalid ID\", function () {\r",
+											"    pm.expect(jsonResponse.message).to.equal(EXPECTED_DATA);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{endpoint}}/update/0",
+									"host": [
+										"{{endpoint}}"
+									],
+									"path": [
+										"update",
+										"0"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "InvalidID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "96821035-03e3-4288-8a09-b4326cb78746",
+										"exec": [
+											"const EXPECTED_STATUS_CODE = 401;",
+											"const EXPECTED_LATENCY = 200;",
+											"const EXPECTED_DATA = \"Record does not found.\"",
+											"const EXPECTED_STATUS = \"failed\"",
+											"let jsonResponse = pm.response.json();",
+											"",
+											"pm.test(\"response is unauthorized\", function () {",
+											"    pm.expect(pm.response.code).to.equal(EXPECTED_STATUS_CODE);",
+											"});",
+											"",
+											"pm.test(\"Content-Type is present\", function () {",
+											"    pm.response.to.have.header(\"Content-Type\");",
+											"});",
+											"",
+											"pm.test(\"Content-Type is JSON\", function () {",
+											"    pm.response.to.be.json;",
+											"})",
+											"",
+											"pm.test(\"Response body should be an object\", function() {",
+											"    pm.expect(jsonResponse).to.be.an('object');",
+											"});",
+											"",
+											"pm.test(\"Response body should be in the correct format\", function() {",
+											"    pm.expect(jsonResponse.status).to.be.a('string');",
+											"    pm.expect(jsonResponse.data).to.be.a('string');",
+											"  });",
+											"",
+											"  pm.test(\"Returns failed status on invalid ID\", function () {",
+											"    pm.expect(jsonResponse.status).to.equal(EXPECTED_STATUS);",
+											"});",
+											"",
+											"pm.test(\"Returns Record does not found on invalid ID\", function () {",
+											"    pm.expect(jsonResponse.data).to.equal(EXPECTED_DATA);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"name\":\"120133127\",\n    \"salary\":\"Ten Thousand\",\n    \"age\":\"Sixty\"\n}",
+									"options": {
+										"raw": {}
+									}
+								},
+								"url": {
+									"raw": "{{endpoint}}/update/-1",
+									"host": [
+										"{{endpoint}}"
+									],
+									"path": [
+										"update",
+										"-1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "LargeValue",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "207d7cd1-3dc1-478c-98d6-f64ea4eeb911",
+										"exec": [
+											"const EXPECTED_STATUS_CODE = 200;\r",
+											"const EXPECTED_LATENCY = 200;\r",
+											"const EXPECTED_NAME = \"RobertWithAVeryUnusualLongFirsName RobertWithAVeryUnusualLongLastName\";\r",
+											"const EXPECTED_SALARY = 18446744073709551615;\r",
+											"const EXPECTED_AGE = 18446744073709551615;\r",
+											"const EXPECTED_ID = \"2\";\r",
+											"let jsonResponse = pm.response.json();\r",
+											"\r",
+											"pm.test(\"response is ok\", function () {\r",
+											"    pm.expect(pm.response.code).to.equal(EXPECTED_STATUS_CODE);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 200ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(EXPECTED_LATENCY);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Content-Type is present\", function () {\r",
+											"    pm.response.to.have.header(\"Content-Type\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Content-Type is JSON\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"})\r",
+											"\r",
+											"pm.test(\"Response body should be an object\", function() {\r",
+											"    pm.expect(jsonResponse).to.be.an('object');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response body should be in the correct format\", function() {\r",
+											"    pm.expect(jsonResponse.status).to.be.a('string');\r",
+											"    pm.expect(jsonResponse.data).to.be.a('object');\r",
+											"    pm.expect(jsonResponse.data.id).to.be.a('string');\r",
+											"    pm.expect(jsonResponse.data.name).to.be.a('string');\r",
+											"    pm.expect(jsonResponse.data.salary).to.be.a('string');\r",
+											"    pm.expect(jsonResponse.data.age).to.be.a('string');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Returns alphabetic name\", function () {\r",
+											"    console.log(data[\"name\"]);\r",
+											"    pm.expect(jsonResponse.data.name).to.equal(EXPECTED_NAME);\r",
+											"});\r",
+											"pm.test(\"Returns numeric salary\", function () {\r",
+											"    pm.expect(jsonResponse.data.salary).to.equal(EXPECTED_SALARY);\r",
+											"});\r",
+											"pm.test(\"Returns numeric age\", function () {\r",
+											"    pm.expect(jsonResponse.data.age).to.equal(EXPECTED_AGE);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Returns the correct id\", function () {\r",
+											"    pm.expect(jsonResponse.data.id).to.equal(EXPECTED_ID);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"name\": \"RobertWithAVeryUnusualLongFirsName RobertWithAVeryUnusualLongLastName\",\n\t\"salary\": \"18446744073709551615\",\n\t\"age\": \"18446744073709551615\"\n}",
+									"options": {
+										"raw": {}
+									}
+								},
+								"url": {
+									"raw": "{{endpoint}}/update/1",
+									"host": [
+										"{{endpoint}}"
+									],
+									"path": [
+										"update",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "OutOfBoundValue",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "c8f50043-13e8-4e91-8fc8-7ff81ecd52d6",
+										"exec": [
+											"const EXPECTED_STATUS_CODE = 422;\r",
+											"\r",
+											"pm.test(\"response is NOT 200\", function () {\r",
+											"    pm.response.to.not.have.status(200);\r",
+											"});\r",
+											"pm.test(\"response is 422\", function () {\r",
+											"    pm.expect(pm.response.code).to.not.equal(EXPECTED_STATUS_CODE);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"name\": \"RobertWithAVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryUnusualLongFirsName RobertWithAVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryUnusualLongLastName\",\n\t\"salary\": \"18446744073709551616\",\n\t\"age\": \"18446744073709551616\"\n}",
+									"options": {
+										"raw": {}
+									}
+								},
+								"url": {
+									"raw": "{{endpoint}}/update/1",
+									"host": [
+										"{{endpoint}}"
+									],
+									"path": [
+										"update",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "InvalidType",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "0336ffe5-ad83-4980-9d16-785a73afc425",
+										"exec": [
+											"const EXPECTED_STATUS_CODE = 422;",
+											"",
+											"pm.test(\"response is NOT 200\", function () {",
+											"    pm.response.to.not.have.status(200);",
+											"});",
+											"pm.test(\"response is 422\", function () {",
+											"    pm.expect(pm.response.code).to.not.equal(EXPECTED_STATUS_CODE);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"name\":\"120133127\",\n    \"salary\":\"Ten Thousand\",\n    \"age\":\"Sixty\"\n}",
+									"options": {
+										"raw": {}
+									}
+								},
+								"url": {
+									"raw": "{{endpoint}}/update/1",
+									"host": [
+										"{{endpoint}}"
+									],
+									"path": [
+										"update",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Delete",
+					"item": [
+						{
+							"name": "EmptyID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "84e12e76-3822-463e-91bd-4c27abc9f089",
+										"exec": [
+											"const EXPECTED_STATUS_CODE = 200;\r",
+											"const EXPECTED_LATENCY = 200;\r",
+											"const EXPECTED_DATA = \"Record does not found.\"\r",
+											"const EXPECTED_STATUS = \"failed\"\r",
+											"let jsonResponse = pm.response.json();\r",
+											"\r",
+											"pm.test(\"response is unauthorized\", function () {\r",
+											"    pm.expect(pm.response.code).to.equal(EXPECTED_STATUS_CODE);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Content-Type is present\", function () {\r",
+											"    pm.response.to.have.header(\"Content-Type\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Content-Type is JSON\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"})\r",
+											"\r",
+											"pm.test(\"Response body should be an object\", function() {\r",
+											"    pm.expect(jsonResponse).to.be.an('object');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response body should be in the correct format\", function() {\r",
+											"    pm.expect(jsonResponse.status).to.be.a('string');\r",
+											"    pm.expect(jsonResponse.message).to.be.a('string');\r",
+											"  });\r",
+											"\r",
+											"pm.test(\"Returns failed status on invalid ID\", function () {\r",
+											"    pm.expect(jsonResponse.status).to.equal(EXPECTED_STATUS);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{endpoint}}/delete/0",
+									"host": [
+										"{{endpoint}}"
+									],
+									"path": [
+										"delete",
+										"0"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "InvalidID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "4a96c7f1-dcab-4510-80a5-235d47092a32",
+										"exec": [
+											"const EXPECTED_STATUS_CODE = 200;\r",
+											"const EXPECTED_LATENCY = 200;\r",
+											"const EXPECTED_DATA = \"Record does not found.\"\r",
+											"const EXPECTED_STATUS = \"failed\"\r",
+											"let jsonResponse = pm.response.json();\r",
+											"\r",
+											"pm.test(\"response is unauthorized\", function () {\r",
+											"    pm.expect(pm.response.code).to.equal(EXPECTED_STATUS_CODE);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Content-Type is present\", function () {\r",
+											"    pm.response.to.have.header(\"Content-Type\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Content-Type is JSON\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"})\r",
+											"\r",
+											"pm.test(\"Response body should be an object\", function() {\r",
+											"    pm.expect(jsonResponse).to.be.an('object');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response body should be in the correct format\", function() {\r",
+											"    pm.expect(jsonResponse.status).to.be.a('string');\r",
+											"    pm.expect(jsonResponse.message).to.be.a('string');\r",
+											"  });\r",
+											"\r",
+											"pm.test(\"Returns failed status on invalid ID\", function () {\r",
+											"    pm.expect(jsonResponse.status).to.equal(EXPECTED_STATUS);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{endpoint}}/delete/-1",
+									"host": [
+										"{{endpoint}}"
+									],
+									"path": [
+										"delete",
+										"-1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "ValidID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "a72fbc5d-bcc3-4d81-887b-b0b5a4f9bbb5",
+										"exec": [
+											"const EXPECTED_STATUS_CODE = 200;\r",
+											"const EXPECTED_LATENCY = 200;\r",
+											"const EXPECTED_STATUS = \"success\";\r",
+											"const EXPECTED_MESSAGE = \"successfully! deleted Records\";\r",
+											"\r",
+											"let jsonResponse = pm.response.json();\r",
+											"\r",
+											"pm.test(\"response is ok\", function () {\r",
+											"    pm.expect(pm.response.code).to.equal(EXPECTED_STATUS_CODE);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 200ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(EXPECTED_LATENCY);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Content-Type is present\", function () {\r",
+											"    pm.response.to.have.header(\"Content-Type\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Content-Type is JSON\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"})\r",
+											"\r",
+											"pm.test(\"Response body should be an object\", function() {\r",
+											"    pm.expect(jsonResponse).to.be.an('object');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response body should be in the correct format\", function() {\r",
+											"    pm.expect(jsonResponse.status).to.be.a('string');\r",
+											"    pm.expect(jsonResponse.message).to.be.a('string');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Returns status\", function () {\r",
+											"    pm.expect(jsonResponse.data.employee_name).to.match(EXPECTED_STATUS);\r",
+											"});\r",
+											"pm.test(\"Returns message\", function () {\r",
+											"    pm.expect(jsonResponse.data.employee_salary).to.match(EXPECTED_MESSAGE);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{endpoint}}/delete/6",
+									"host": [
+										"{{endpoint}}"
+									],
+									"path": [
+										"delete",
+										"6"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Integration tests",
+					"item": [
+						{
+							"name": "CRUD",
+							"item": [
+								{
+									"name": "Create",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "c6b7e8a0-bde6-4d58-8124-c8501be30198",
+												"exec": [
+													"const EXPECTED_STATUS_CODE = 200;",
+													"// Parsing the response returned by the request.",
+													"var jsonData = pm.response.json();",
+													"",
+													"pm.test(\"response is ok\", function () {",
+													"    pm.expect(pm.response.code).to.equal(EXPECTED_STATUS_CODE);",
+													"});",
+													"",
+													"// Extracting the token from the response and setting it as a global variable.",
+													"pm.collectionVariables.set(\"newId\", jsonData.data['id']);",
+													"pm.collectionVariables.set(\"newName\", jsonData.data['name']);",
+													"pm.collectionVariables.set(\"newSalary\", jsonData.data['salary']);",
+													"pm.collectionVariables.set(\"newAge\", jsonData.data['age']);"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n\t\"name\": \"Rober Test\",\n\t\"salary\": \"123456\",\n\t\"age\": \"60\"\n}"
+										},
+										"url": {
+											"raw": "{{endpoint}}/create",
+											"host": [
+												"{{endpoint}}"
+											],
+											"path": [
+												"create"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Read",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "11bdf8b6-ebf5-40a1-b58e-16a0986b6aa8",
+												"exec": [
+													"const EXPECTED_STATUS_CODE = 200;",
+													"",
+													"let jsonResponse = pm.response.json();",
+													"",
+													"pm.test(\"response is ok\", function () {",
+													"    pm.expect(pm.response.code).to.equal(EXPECTED_STATUS_CODE);",
+													"});",
+													"",
+													"pm.test(\"Returns alphabetic name\", function () {",
+													"    pm.expect(jsonResponse.data.employee_name).to.equal(pm.variables.get(\"newName\"));",
+													"});",
+													"pm.test(\"Returns numeric salary\", function () {",
+													"    pm.expect(jsonResponse.data.employee_salary).to.equal(pm.variables.get(\"newSalary\"));",
+													"});",
+													"pm.test(\"Returns numeric age\", function () {",
+													"    pm.expect(jsonResponse.data.employee_age).to.equal(pm.variables.get(\"newAge\"));",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{endpoint}}/employee/{{newId}}",
+											"host": [
+												"{{endpoint}}"
+											],
+											"path": [
+												"employee",
+												"{{newId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Update",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "3350dbc0-a004-4915-b724-41ce538aca3d",
+												"exec": [
+													"// Parsing the response returned by the request.",
+													"let jsonResponse = pm.response.json();",
+													"",
+													"// Extracting the token from the response and setting it as a global variable.",
+													"pm.collectionVariables.set(\"updatedName\", jsonResponse.data['name']);",
+													"pm.collectionVariables.set(\"updatedSalary\", jsonResponse.data['salary']);",
+													"pm.collectionVariables.set(\"updatedAge\", jsonResponse.data['age']);",
+													"",
+													"const EXPECTED_STATUS_CODE = 200;",
+													"",
+													"",
+													"",
+													"pm.test(\"response is ok\", function () {",
+													"    pm.expect(pm.response.code).to.equal(EXPECTED_STATUS_CODE);",
+													"});",
+													"",
+													"pm.test(\"Check name in response\", function () {",
+													"    console.log(data[\"name\"]);",
+													"    pm.expect(jsonResponse.data.employee_name).to.equal(pm.variables.get(\"updatedName\"));",
+													"});",
+													"pm.test(\"Check salary in response\", function () {",
+													"    pm.expect(jsonResponse.data.employee_salary).to.equal(pm.variables.get(\"updatedSalary\"));",
+													"});",
+													"pm.test(\"Returns age in response\", function () {",
+													"    pm.expect(jsonResponse.data.employee_age).to.equal(pm.variables.get(\"updatedAge\"));",
+													"});",
+													"",
+													"pm.test(\"Returns id in response\", function () {",
+													"    pm.expect(jsonResponse.data.id).to.equal(pm.variables.get(\"newId\"));",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n\t\"name\": \"Rober Test1\",\n\t\"salary\": \"1234567\",\n\t\"age\": \"65\"\n}"
+										},
+										"url": {
+											"raw": "{{endpoint}}/update/{{newId}}",
+											"host": [
+												"{{endpoint}}"
+											],
+											"path": [
+												"update",
+												"{{newId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Read After Update",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "2bc0e10a-44f9-4d78-a8f3-80d41a8532e0",
+												"exec": [
+													"const EXPECTED_STATUS_CODE = 200;",
+													"",
+													"let jsonResponse = pm.response.json();",
+													"",
+													"pm.test(\"response is ok\", function () {",
+													"    pm.expect(pm.response.code).to.equal(EXPECTED_STATUS_CODE);",
+													"});",
+													"",
+													"pm.test(\"Check name in response\", function () {",
+													"    console.log(data[\"name\"]);",
+													"    pm.expect(jsonResponse.data.employee_name).to.equal(pm.variables.get(\"updatedName\"));",
+													"});",
+													"pm.test(\"Check salary in response\", function () {",
+													"    pm.expect(jsonResponse.data.employee_salary).to.equal(pm.variables.get(\"updatedSalary\"));",
+													"});",
+													"pm.test(\"Returns age in response\", function () {",
+													"    pm.expect(jsonResponse.data.employee_age).to.equal(pm.variables.get(\"updatedAge\"));",
+													"});",
+													"",
+													"pm.test(\"Returns id in response\", function () {",
+													"    pm.expect(jsonResponse.data.id).to.equal(pm.variables.get(\"newId\"));",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{endpoint}}/employee/{{newId}}",
+											"host": [
+												"{{endpoint}}"
+											],
+											"path": [
+												"employee",
+												"{{newId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Delete",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "ff65a4dd-8ef6-4fbe-ade0-b2dd0e9fd972",
+												"exec": [
+													"const EXPECTED_STATUS_CODE = 200;",
+													"const EXPECTED_LATENCY = 200;",
+													"const EXPECTED_STATUS = \"success\";",
+													"const EXPECTED_MESSAGE = \"successfully! deleted Records\";",
+													"",
+													"let jsonResponse = pm.response.json();",
+													"",
+													"pm.test(\"response is ok\", function () {",
+													"    pm.expect(pm.response.code).to.equal(EXPECTED_STATUS_CODE);",
+													"});",
+													"",
+													"pm.test(\"Content-Type is present\", function () {",
+													"    pm.response.to.have.header(\"Content-Type\");",
+													"});",
+													"",
+													"pm.test(\"Returns status\", function () {",
+													"    pm.expect(jsonResponse.data.employee_name).to.match(EXPECTED_STATUS);",
+													"});",
+													"pm.test(\"Returns message\", function () {",
+													"    pm.expect(jsonResponse.data.employee_salary).to.match(EXPECTED_MESSAGE);",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{endpoint}}/delete/{{newId}}",
+											"host": [
+												"{{endpoint}}"
+											],
+											"path": [
+												"delete",
+												"{{newId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Read After Delete",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "ee148939-094d-40d4-bbd1-75909c4cc1cc",
+												"exec": [
+													"const EXPECTED_STATUS_CODE = 401;",
+													"const EXPECTED_LATENCY = 200;",
+													"const EXPECTED_DATA = \"Record does not found.\"",
+													"const EXPECTED_STATUS = \"failed\"",
+													"let jsonResponse = pm.response.json();",
+													"",
+													"pm.test(\"response is unauthorized\", function () {",
+													"    pm.expect(pm.response.code).to.equal(EXPECTED_STATUS_CODE);",
+													"});",
+													"",
+													"  pm.test(\"Returns failed status on invalid ID\", function () {",
+													"    pm.expect(jsonResponse.status).to.equal(EXPECTED_STATUS);",
+													"});",
+													"",
+													"pm.test(\"Returns Record does not found on invalid ID\", function () {",
+													"    pm.expect(jsonResponse.data).to.equal(EXPECTED_DATA);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{endpoint}}/employee/{{newId}}",
+											"host": [
+												"{{endpoint}}"
+											],
+											"path": [
+												"employee",
+												"{{newId}}"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"variable": [
+		{
+			"id": "83b043be-2841-4313-b09a-e51d15b5dea2",
+			"key": "newAge",
+			"value": "60",
+			"type": "string"
+		},
+		{
+			"id": "ffe283e7-5921-4238-bdc4-a4e044ee7f57",
+			"key": "newId",
+			"value": 74,
+			"type": "number"
+		},
+		{
+			"id": "8137bbaf-ef5f-49c2-9aad-bfdd42c02126",
+			"key": "newName",
+			"value": "Rober Test",
+			"type": "string"
+		},
+		{
+			"id": "1572e1c7-5f54-4ddd-a3f9-0850af03fd54",
+			"key": "newSalary",
+			"value": "123456",
+			"type": "string"
+		},
+		{
+			"id": "cc872f28-6f3c-4d2e-81a6-1afbfd0f3b34",
+			"key": "updatedAge",
+			"value": null,
+			"type": "any"
+		},
+		{
+			"id": "9b798a8b-4d1d-48ae-8fd3-9c713f83997f",
+			"key": "updatedName",
+			"value": null,
+			"type": "any"
+		},
+		{
+			"id": "7e417967-af1a-4876-8c53-199289637946",
+			"key": "updatedSalary",
+			"value": null,
+			"type": "any"
+		}
+	],
+	"protocolProfileBehavior": {}
+}
